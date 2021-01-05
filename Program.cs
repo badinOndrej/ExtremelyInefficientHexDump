@@ -29,18 +29,23 @@ namespace hexDump
         /// <param name="filePath">path to file</param>
         /// <param name="toScreen">output to screen (true) or to file (false)</param>
         static void dumpFile(string filePath, bool toScreen) {
+            // set up output file path
             string outFilePath = filePath + ".hexdump";
             if(!toScreen) Console.WriteLine("Output file: \"" + outFilePath + "\"");
             using(FileStream fs = File.OpenRead(filePath)) {
-                char[] charBuffer = new char[16];
-                byte cBCount = 0;
-                byte outByte;
+                char[] charBuffer = new char[16]; // character buffer for ascii output
+                byte cBCount = 0;                 // with counter
+                byte outByte;                     // output variable
+                // go through the file reading bytes
                 for(int i = 0; i < fs.Length; i++) {
                     outByte = (byte) fs.ReadByte();
+                    // convert to two-digit hex and output
                     if(toScreen) Console.Write(outByte.ToString("X2") + " ");
                     else writeString(outFilePath, outByte.ToString("X2") + " ");
+                    // convert to ascii and add to buffer
                     if(outByte > 31) charBuffer[cBCount++] = Convert.ToChar(outByte);
                     else charBuffer[cBCount++] = '.';
+                    // once buffer is full, write ascii output and new line
                     if(cBCount == 15) {
                         cBCount = 0;
                         foreach(char c in charBuffer) {
@@ -53,10 +58,12 @@ namespace hexDump
                 }
                 // after end of file, are there still characters in the buffer?
                 if(cBCount > 0) {
+                    // fix spacing
                     for(int i = 0; i < 15 - cBCount; i++) {
                         if(toScreen) Console.Write("   ");
                         else writeString(outFilePath, "   ");
                     }
+                    // output remainder of character buffer
                     for(int i = 0; i < cBCount; i++) {
                             if(toScreen) Console.Write(charBuffer[i]);
                             else writeString(outFilePath, charBuffer[i].ToString());
@@ -72,7 +79,10 @@ namespace hexDump
         static void reconstructFile(string filePath, bool toScreen) {
             // create output file if needed
             string outFilePath = filePath.Substring(0, filePath.Length - Path.GetExtension(filePath).Length);
-            if(!toScreen) File.Create(outFilePath).Close();
+            if(!toScreen) {
+                Console.WriteLine("Output file: \"" + outFilePath + "\"");
+                File.Create(outFilePath).Close();
+            }
             using(FileStream fs = File.OpenRead(filePath)) {
                 using(StreamReader sr = new StreamReader(fs)) {
                     string line;
