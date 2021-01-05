@@ -2,13 +2,13 @@
 Extremely inefficient command line hex dump program  
 Do not use for... Actually, don't use, full stop.
 
-# Build requirements
+## Build requirements
 .NET 5.0 SDK (https://dotnet.microsoft.com/download/dotnet/5.0)
 
-# Runtime requirements
+## Runtime requirements
 .NET 5.0 Runtime (see above)
 
-# Usage
+## Usage
 `hexDump [path] [s|f]`  
 s - output to screen  
 f - output to file  
