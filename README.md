@@ -1,5 +1,5 @@
 # ExtremelyInefficientHexDump
-Extremely inefficient command line hex dump program
+Extremely inefficient command line hex dump program  
 Do not use for... Actually, don't use, full stop.
 
 # Build requirements
