@@ -29,35 +29,42 @@ namespace hexDump
         /// <param name="filePath">path to file</param>
         /// <param name="toScreen">output to screen (true) or to file (false)</param>
         static void dumpFile(string filePath, bool toScreen) {
-            // set up output file path
+            // set up output file path & create file if needed
             string outFilePath = filePath + ".hexdump";
-            if(!toScreen) Console.WriteLine("Output file: \"" + outFilePath + "\"");
+            if(!toScreen) {
+                Console.WriteLine("Output file: \"" + outFilePath + "\"");
+                File.Create(outFilePath).Close();
+            }
             using(FileStream fs = File.OpenRead(filePath)) {
                 char[] charBuffer = new char[16]; // character buffer for ascii output
                 byte cBCount = 0;                 // with counter
                 byte outByte;                     // output variable
+                string lineBuffer = "";           // line buffer for speeding up file operations slightly
                 // go through the file reading bytes
                 for(int i = 0; i < fs.Length; i++) {
                     outByte = (byte) fs.ReadByte();
                     // convert to two-digit hex and output
-                    if(toScreen) Console.Write(outByte.ToString("X2") + " ");
-                    else writeString(outFilePath, outByte.ToString("X2") + " ");
+                    lineBuffer += outByte.ToString("X2") + " ";
                     // convert to ascii and add to buffer
                     if(outByte > 31) charBuffer[cBCount++] = Convert.ToChar(outByte);
                     else charBuffer[cBCount++] = '.';
                     // once buffer is full, write ascii output and new line
-                    if(cBCount == 15) {
+                    if(cBCount == charBuffer.Length - 1) {
                         cBCount = 0;
                         foreach(char c in charBuffer) {
-                            if(toScreen) Console.Write(c);
-                            else writeString(outFilePath, c.ToString());
+                            lineBuffer += c.ToString();
                         }
-                        if(toScreen) Console.WriteLine();
-                        else writeString(outFilePath, "\n");
+                        lineBuffer += "\n";
+                        if(toScreen) Console.Write(lineBuffer);
+                        else writeString(outFilePath, lineBuffer);
+                        lineBuffer = "";
                     }
                 }
                 // after end of file, are there still characters in the buffer?
                 if(cBCount > 0) {
+                    // output remainder of line buffer (doesn't contain ascii output)
+                    if(toScreen) Console.Write(lineBuffer);
+                    else writeString(outFilePath, lineBuffer);
                     // fix spacing
                     for(int i = 0; i < 15 - cBCount; i++) {
                         if(toScreen) Console.Write("   ");
@@ -96,7 +103,7 @@ namespace hexDump
                         for(int i = 0; i < line.Length / 2; i++) {
                             arrOfHex[i] = line.Substring(i*2, 2);
                         }
-                        // write to console
+                        // write to console (still slow)
                         if(toScreen) {
                             for(int i = 0; i < arrOfHex.Length; i++) {
                                 if(arrOfHex[0] == "EF" && arrOfHex[1] == "BB" && arrOfHex[2] == "BF" && i < 3) i = 3; // ignore unicode header, UTF-8
@@ -109,11 +116,10 @@ namespace hexDump
                                 if(charCode > 31) Console.Write(Convert.ToChar(charCode)); // otherwise ignore non-printable characters
                             }
                         }
-                        // write to file
+                        // write to file (buffered, probably a bit faster)
                         else {
                             foreach(string hex in arrOfHex) {
-                                byte charCode = byte.Parse(hex, System.Globalization.NumberStyles.HexNumber); // parse hex string into byte
-                                writeByte(outFilePath, charCode); // write into file
+                                writeByte(outFilePath, byte.Parse(hex, System.Globalization.NumberStyles.HexNumber)); // parse hex string into byte & write to file
                             }
                         }
                     }
