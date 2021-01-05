@@ -1,0 +1,16 @@
+D:\src\c#\hexDump\obj\Debug\net5.0\hexDump.csprojAssemblyReference.cache
+D:\src\c#\hexDump\obj\Debug\net5.0\hexDump.GeneratedMSBuildEditorConfig.editorconfig
+D:\src\c#\hexDump\obj\Debug\net5.0\hexDump.AssemblyInfoInputs.cache
+D:\src\c#\hexDump\obj\Debug\net5.0\hexDump.AssemblyInfo.cs
+D:\src\c#\hexDump\obj\Debug\net5.0\hexDump.csproj.CoreCompileInputs.cache
+D:\src\c#\hexDump\bin\Debug\net5.0\hexDump.exe
+D:\src\c#\hexDump\bin\Debug\net5.0\hexDump.deps.json
+D:\src\c#\hexDump\bin\Debug\net5.0\hexDump.runtimeconfig.json
+D:\src\c#\hexDump\bin\Debug\net5.0\hexDump.runtimeconfig.dev.json
+D:\src\c#\hexDump\bin\Debug\net5.0\hexDump.dll
+D:\src\c#\hexDump\bin\Debug\net5.0\ref\hexDump.dll
+D:\src\c#\hexDump\bin\Debug\net5.0\hexDump.pdb
+D:\src\c#\hexDump\obj\Debug\net5.0\hexDump.dll
+D:\src\c#\hexDump\obj\Debug\net5.0\ref\hexDump.dll
+D:\src\c#\hexDump\obj\Debug\net5.0\hexDump.pdb
+D:\src\c#\hexDump\obj\Debug\net5.0\hexDump.genruntimeconfig.cache
