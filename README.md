@@ -5,7 +5,7 @@ Extremely inefficient command line hex dump program
 .NET 5.0 SDK (https://dotnet.microsoft.com/download/dotnet/5.0)
 
 # Usage
-`hexDump [path] [s|f]`
+`hexDump [path] [s|f]`  
 s - output to screen  
 f - output to file  
 If no arguments are given, program will ask for required info.
