@@ -1,6 +1,6 @@
 # ExtremelyInefficientHexDump
 Extremely inefficient command line hex dump program  
-Do not use for... Actually, don't use, full stop.
+Do not use for... Actually, don't use, full stop.  
 v0.3.inf slightly faster but still mostly unusable.
 
 ## Build requirements
