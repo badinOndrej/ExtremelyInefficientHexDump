@@ -18,10 +18,10 @@ namespace hexDump
 
         /// <summary>Writes byte outByte into file at outFilePath</summary>
         /// <param name="outFilePath">output file path</param>
-        /// <param name="outByte">output byte</param>
-        static void writeByte(string outFilePath, byte outByte) {
+        /// <param name="outByteBuffer">output byte buffer</param>
+        static void writeByte(string outFilePath, byte[] outByteBuffer) {
             using(FileStream fs = File.Open(outFilePath, FileMode.Append)) {
-                fs.WriteByte(outByte);
+                fs.Write(outByteBuffer);
             }
         }
 
@@ -103,8 +103,9 @@ namespace hexDump
                         for(int i = 0; i < line.Length / 2; i++) {
                             arrOfHex[i] = line.Substring(i*2, 2);
                         }
-                        // write to console (still slow)
+                        // write to console
                         if(toScreen) {
+                            string lineBuffer = "";
                             for(int i = 0; i < arrOfHex.Length; i++) {
                                 if(arrOfHex[0] == "EF" && arrOfHex[1] == "BB" && arrOfHex[2] == "BF" && i < 3) i = 3; // ignore unicode header, UTF-8
                                 if(arrOfHex[0] == "FF" && arrOfHex[1] == "FE" && i < 2) i = 2; // ignore unicode header, UTF-16 LE
@@ -112,15 +113,19 @@ namespace hexDump
                                 if(arrOfHex[0] == "FF" && arrOfHex[1] == "FE" && arrOfHex[2] == "00" && arrOfHex[3] == "00" && i < 4) i = 4; // ignore unicode header, UTF-32 LE
                                 if(arrOfHex[0] == "00" && arrOfHex[1] == "00" && arrOfHex[2] == "FE" && arrOfHex[3] == "FF" && i < 4) i = 4; // ignore unicode header, UTF-32 BE
                                 byte charCode = byte.Parse(arrOfHex[i], System.Globalization.NumberStyles.HexNumber); // parse hex string into byte
-                                if(charCode == 0x0a) Console.WriteLine();   // acknowledge linefeed
-                                if(charCode > 31) Console.Write(Convert.ToChar(charCode)); // otherwise ignore non-printable characters
+                                if(charCode == 0x0a) lineBuffer += Convert.ToChar(charCode).ToString();   // acknowledge linefeed
+                                if(charCode > 31) lineBuffer += Convert.ToChar(charCode).ToString(); // otherwise ignore non-printable characters
                             }
+                            Console.Write(lineBuffer);
                         }
-                        // write to file (buffered, probably a bit faster)
+                        // write to file (buffer for each line of source file, probably a bit faster)
                         else {
-                            foreach(string hex in arrOfHex) {
-                                writeByte(outFilePath, byte.Parse(hex, System.Globalization.NumberStyles.HexNumber)); // parse hex string into byte & write to file
+                            byte[] lineBuffer = new byte[arrOfHex.Length];
+                            for(int i = 0; i < arrOfHex.Length; i++) {
+                                // parse hex string into byte
+                                lineBuffer[i] = byte.Parse(arrOfHex[i], System.Globalization.NumberStyles.HexNumber);
                             }
+                            writeByte(outFilePath, lineBuffer);
                         }
                     }
                 }
