@@ -6,6 +6,11 @@ v0.3.inf slightly faster but still mostly unusable.
 ## Build requirements
 .NET 5.0 SDK (https://dotnet.microsoft.com/download/dotnet/5.0)
 
+## Build instructions
+`git clone https://github.com/badinOndrej/ExtremelyInefficientHexDump`  
+`cd ExtremelyInefficientHexDump`  
+`dotnet build` for debug or `dotnet publish` for release or `dotnet run` to build debug & run
+
 ## Runtime requirements
 .NET 5.0 Runtime (see above)
 
