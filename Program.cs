@@ -49,7 +49,7 @@ namespace hexDump
                     if(outByte > 31) charBuffer[cBCount++] = Convert.ToChar(outByte);
                     else charBuffer[cBCount++] = '.';
                     // once buffer is full, write ascii output and new line
-                    if(cBCount == charBuffer.Length - 1) {
+                    if(cBCount == charBuffer.Length) {
                         cBCount = 0;
                         foreach(char c in charBuffer) {
                             lineBuffer += c.ToString();
@@ -66,7 +66,7 @@ namespace hexDump
                     if(toScreen) Console.Write(lineBuffer);
                     else writeString(outFilePath, lineBuffer);
                     // fix spacing
-                    for(int i = 0; i < 15 - cBCount; i++) {
+                    for(int i = 0; i < charBuffer.Length - cBCount; i++) {
                         if(toScreen) Console.Write("   ");
                         else writeString(outFilePath, "   ");
                     }
@@ -94,8 +94,8 @@ namespace hexDump
                 using(StreamReader sr = new StreamReader(fs)) {
                     string line;
                     while((line = sr.ReadLine()) != null) {
-                        // hex data are in the first 45 characters of each line, then comes the ascii representation
-                        line = line.Substring(0, 45);
+                        // hex data are in the first 48 characters of each line, then comes the ascii representation
+                        line = line.Substring(0, 48);
                         // delete whitespaces
                         line = line.Replace(" ", "");
                         // split into chunks of 2
